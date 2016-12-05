@@ -126,6 +126,18 @@ def get_train_filenames(src_train_dir, misc_dir, seed=1):
 
     return train_filenames
 
+def get_val_filenames(src_val_dir):
+    
+    subfolders = [name for name in os.listdir(src_val_dir)
+            if os.path.isdir(os.path.join(src_val_dir, name))]
+
+    val_filenames = []
+    for subfolder in subfolders:
+        val_filenames += glob.glob(src_val_dir + subfolder + '/*JPEG')
+        
+    val_filenames = np.asarray(sorted(val_filenames))
+    
+    return val_filenames
 
 if __name__ == '__main__':
     with open('paths.yaml', 'r') as f:
@@ -148,7 +160,7 @@ if __name__ == '__main__':
         NotImplementedError("gen_type (2nd argument of make_hkl.py) can only be full or toy")
 
     train_filenames = get_train_filenames(train_img_dir, misc_dir)
-    val_filenames = np.asarray(sorted(glob.glob(val_img_dir + '/*JPEG')))
+    val_filenames = get_val_filenames(val_img_dir)
 
     img_size = 256
     batch_size = 256
@@ -159,6 +171,7 @@ if __name__ == '__main__':
         val_filenames = val_filenames[:2560]
 
     for num_sub_batch in [1, 2]:
+        print("generating train and validation......")
         tar_train_dir = paths['tar_train_dir']
         tar_val_dir = paths['tar_val_dir']
         tar_train_dir += '_b' + str(batch_size) + \

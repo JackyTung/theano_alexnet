@@ -170,6 +170,7 @@ def train_net(config):
             save_momentums(vels, config['weights_dir'], epoch)
 
     print('Optimization complete.')
+    return
 
 
 if __name__ == '__main__':
@@ -199,6 +200,5 @@ if __name__ == '__main__':
         load_proc.join()
 
     else:
-        train_proc = Process(target=train_net, args=(config,))
-        train_proc.start()
-        train_proc.join()
+        # nvprof can profile this function
+        train_net(config)

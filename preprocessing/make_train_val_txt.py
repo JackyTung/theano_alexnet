@@ -5,7 +5,7 @@ import os
 import yaml
 import scipy.io
 import numpy as np
-
+from make_hkl import get_val_filenames
 
 with open('paths.yaml', 'r') as f:
     paths = yaml.load(f)
@@ -46,11 +46,15 @@ dict_sorted_id_to_orig_id = {ind: int(sorted_train_ids[ind, 1])
 
 
 # generate val.txt
-val_img_list = sorted([name for name in os.listdir(val_img_dir)
-                       if '.JPEG' in name])
+val_img_list = get_val_filenames(val_img_dir)
 
 with open(val_label_file, 'r') as f:
     val_labels = f.readlines()
+
+print("numbers of images and labels information:.......")
+print("number of images:", len(val_img_list))
+print("number of labels:", len(val_labels))
+
 
 assert len(val_labels) == len(val_img_list), \
     'Validation data: Numbers of images and labels should be the same.'
