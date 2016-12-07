@@ -6,5 +6,5 @@ sock_data: 5001
 batch_size: 256 # def: 256
 
 # Directories
-train_folder: /home/ec2-user/ilsvrc12/train_hkl_b256_b_256/
-val_folder: /home/ec2-user/ilsvrc12/val_hkl_b256_b_256/
+train_folder: /dl-mount/theano/subset/train_hkl_b256_b_256/
+val_folder: /dl-mount/theano/subset/val_hkl_b256_b_256/
