@@ -4,6 +4,7 @@ For generating caffe style train and validation label txt files
 import os
 import yaml
 import scipy.io
+import random
 import numpy as np
 from make_hkl import get_val_filenames
 
@@ -61,8 +62,12 @@ assert len(val_labels) == len(val_img_list), \
 
 with open(valtxt_filename, 'w') as f:
     for ind in range(len(val_labels)):
-        str_write = val_img_list[ind] + ' ' + \
-            str(dict_orig_id_to_sorted_id[int(val_labels[ind])]) + '\n'
+        # for generate right label usage
+        #str_write = val_img_list[ind] + ' ' + \
+        #    str(dict_orig_id_to_sorted_id[int(val_labels[ind])]) + '\n'
+        
+        # for generate random ground truth usage
+        str_write = val_img_list[ind] + ' ' + str(random.randint(0, 99)) + '\n'
         f.write(str_write)
 
 
