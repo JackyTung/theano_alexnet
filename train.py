@@ -182,9 +182,14 @@ if __name__ == '__main__':
         
     config = proc_configs(config)
 
-
-
-
+    print("===== config setting =====")
+    print("n_epochs: ", config['n_epochs'])
+    print("learning rate: ", config['learning_rate'])
+    print("batch_size: ", config['batch_size'] )
+    print("gpu: ", config['gpu'])
+    print("train_folder: ", config['train_folder'])
+    print("val_folder: ", config['val_folder'])
+    print("==========================")
 
 
     if config['para_load']:

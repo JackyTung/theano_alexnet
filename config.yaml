@@ -27,8 +27,8 @@ momentum: 0.9 # def: 0.9
 weight_decay: 0.0005 # def: 0.0005
 
 # Directories
-label_folder: /home/ec2-user/ilsvrc12/labels/
-mean_file: /home/ec2-user/ilsvrc12/misc/img_mean.npy
+label_folder: /dl-mount/theano/subset/labels/
+mean_file: /dl-mount/theano/subset/misc/img_mean.npy
 weights_dir: ./models/  # directory for saving weights and results
 
 # conv library

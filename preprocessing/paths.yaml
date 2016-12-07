@@ -1,8 +1,8 @@
 
-train_img_dir: '/dl-mount/subset/train'
+train_img_dir: '/dl-mount/subset/train/'
 # the dir that contains folders like n01440764, n01443537, ...
 
-val_img_dir: '/dl-mount/subset/val'
+val_img_dir: '/dl-mount/subset/val/'
 # the dir that contains ILSVRC2012_val_00000001~50000.JPEG
 
 tar_root_dir: '/dl-mount/theano/subset'  # dir to store all the preprocessed files
