@@ -16,21 +16,22 @@ def proc_configs(config):
     return config
 
 
-def unpack_configs(config, ext_data='.hkl', ext_label='.npy'):
-    flag_para_load = config['para_load']
-
+def unpack_configs(args, ext_data='.hkl', ext_label='.npy'):
+    
     # Load Training/Validation Filenames and Labels
-    train_folder = config['train_folder']
-    val_folder = config['val_folder']
-    label_folder = config['label_folder']
+    
+    train_folder = os.path.join(args.data_dir, args.train_dataset)
+    val_folder = os.path.join(args.data_dir, args.val_dataset)
+    label_folder = os.path.join(args.data_dir, args.label_folder)
+    mean_folder = os.path.join(args.data_dir, args.mean_file) 
+
     train_filenames = sorted(glob.glob(train_folder + '/*' + ext_data))
     val_filenames = sorted(glob.glob(val_folder + '/*' + ext_data))
-    train_labels = np.load(label_folder + 'train_labels' + ext_label)
-    val_labels = np.load(label_folder + 'val_labels' + ext_label)
-    img_mean = np.load(config['mean_file'])
+    train_labels = np.load(os.path.join(label_folder, 'train_labels' + ext_label))
+    val_labels = np.load(os.path.join(label_folder, 'val_labels' + ext_label))
+    img_mean = np.load(mean_folder)
     img_mean = img_mean[:, :, :, np.newaxis].astype('float32')
-    return (flag_para_load, 
-            train_filenames, val_filenames, train_labels, val_labels, img_mean)
+    return (train_filenames, val_filenames, train_labels, val_labels, img_mean)
 
 
 

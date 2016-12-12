@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 from multiprocessing import Process, Queue
 
@@ -6,6 +7,7 @@ import yaml
 import numpy as np
 import zmq
 import pycuda.driver as drv
+import argparse
 
 sys.path.append('./lib')
 from tools import (save_weights, load_weights,
@@ -14,12 +16,33 @@ from train_funcs import (unpack_configs, adjust_learning_rate,
                          get_val_error_loss, get_rand3d, train_model_wrap,
                          proc_configs)
 
+parser = argparse.ArgumentParser(description='train an image classifer on imagenet')
+
+parser.add_argument('--data-dir', type=str, required=True,
+                    help='the input data directory')
+parser.add_argument('--train-dataset', type=str, required=True,
+                    help='train dataset name')
+parser.add_argument('--val-dataset', type=str, required=True,
+                    help='validation dataset name')
+parser.add_argument('--label-folder', type=str, default="labels",
+                    help='label folder name')
+parser.add_argument('--mean-file', type=str, default="misc/img_mean.npy",
+                    help='mean file name')
+parser.add_argument('--num-epochs', type=int, default=1,
+                    help='the number of training epochs')
+parser.add_argument('--batch-size', type=int, required=True,
+                    choices = [64, 128, 256, 512],
+                    help='the batch size')
+
+args = parser.parse_args()
 
 def train_net(config):
 
     # UNPACK CONFIGS
-    (flag_para_load, train_filenames, val_filenames,
-     train_labels, val_labels, img_mean) = unpack_configs(config)
+    flag_para_load = config['para_load']
+
+    (train_filenames, val_filenames,
+     train_labels, val_labels, img_mean) = unpack_configs(args)
 
     # pycuda set up
     drv.init()
@@ -49,7 +72,7 @@ def train_net(config):
     import theano.misc.pycuda_utils
 
     ## BUILD NETWORK ##
-    model = AlexNet(config)
+    model = AlexNet(config, args)
     layers = model.layers
     batch_size = model.batch_size
 
@@ -80,7 +103,7 @@ def train_net(config):
     epoch = 0
     step_idx = 0
     val_record = []
-    while epoch < config['n_epochs']:
+    while epoch < args.num_epochs:
         epoch = epoch + 1
 
         if config['shuffle']:
@@ -180,17 +203,18 @@ if __name__ == '__main__':
     with open('spec_1gpu.yaml', 'r') as f:
         config = dict(config.items() + yaml.load(f).items())
         
-    config = proc_configs(config)
-
-    print("===== config setting =====")
-    print("n_epochs: ", config['n_epochs'])
-    print("learning rate: ", config['learning_rate'])
-    print("batch_size: ", config['batch_size'] )
-    print("gpu: ", config['gpu'])
-    print("train_folder: ", config['train_folder'])
-    print("val_folder: ", config['val_folder'])
-    print("==========================")
-
+    path_train = os.path.join(args.data_dir, args.train_dataset)
+    path_val = os.path.join(args.data_dir, args.val_dataset)
+    path_label = os.path.join(args.data_dir, args.label_folder)
+    path_mean = os.path.join(args.data_dir, args.mean_file)
+    
+    print("===== argument setting =====")
+    print("path_train: ",path_train)
+    print("path_val: ",path_val)
+    print("path_label: ",path_label)
+    print("path_mean: ",path_mean)
+    print("num_epochs: ",args.num_epochs)
+    print("batch_size: ",args.batch_size)
 
     if config['para_load']:
         from proc_load import fun_load

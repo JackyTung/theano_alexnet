@@ -11,11 +11,11 @@ from layers import DataLayer, ConvPoolLayer, DropoutLayer, FCLayer, SoftmaxLayer
 
 class AlexNet(object):
 
-    def __init__(self, config):
+    def __init__(self, config, args):
 
         self.config = config
 
-        batch_size = config['batch_size']
+        batch_size = args.batch_size
         flag_datalayer = config['use_data_layer']
         lib_conv = config['lib_conv']
 
