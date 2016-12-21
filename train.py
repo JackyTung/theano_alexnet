@@ -202,7 +202,9 @@ if __name__ == '__main__':
         config = yaml.load(f)
     with open('spec_1gpu.yaml', 'r') as f:
         config = dict(config.items() + yaml.load(f).items())
-        
+       
+    config = proc_configs(config)
+
     path_train = os.path.join(args.data_dir, args.train_dataset)
     path_val = os.path.join(args.data_dir, args.val_dataset)
     path_label = os.path.join(args.data_dir, args.label_folder)
